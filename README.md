@@ -30,7 +30,7 @@ See where it's stored.
 
 ```python
 >>> print archive_url
-http://web.archive.org/web/20161018203554/http://www.example.com/
+http://archive.is/WxlRK
 ```
 
 If a URL has been recently cached, archive.is may return the URL to that page rather
@@ -50,7 +50,7 @@ The command has the same options as the Python API, which you can learn about fr
 $ archiveis --help
 Usage: archiveis [OPTIONS] URL
 
-  Archives the provided URL using the archive.is capture service.
+  Archives the provided URL using the archive.is capturing service.
 
 Options:
   -ua, --user-agent TEXT  User-Agent header for the web request
