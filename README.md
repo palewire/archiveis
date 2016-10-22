@@ -1,6 +1,6 @@
 # archiveis
 
-A simple Python wrapper for the archive.is capturing service.
+A simple Python wrapper for the [archive.is](http://archive.is/) capturing service.
 
 [![PyPI version](https://badge.fury.io/py/archiveis.png)](http://badge.fury.io/py/archiveis)
 [![Build Status](https://travis-ci.org/pastpages/archiveis.svg?branch=master)](https://travis-ci.org/pastpages/archiveis)
