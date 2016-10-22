@@ -32,8 +32,6 @@ def capture(
     }
     response = requests.post(save_url, headers=headers, data=data)
 
-    print response.headers
-
     # archive.is returns a link format timemap in the header field link
     # but if it was the first time archive.is has archived the uri-r
     # or for some other reason unknown at this time
