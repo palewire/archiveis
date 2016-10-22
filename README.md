@@ -50,7 +50,7 @@ The command has the same options as the Python API, which you can learn about fr
 $ archiveis --help
 Usage: archiveis [OPTIONS] URL
 
-  Archives the provided URL using the archive.is capture service.
+  Archives the provided URL using the archive.is capturing service.
 
 Options:
   -ua, --user-agent TEXT  User-Agent header for the web request
