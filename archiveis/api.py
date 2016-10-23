@@ -8,7 +8,7 @@ from six.moves.urllib.parse import urljoin
 
 def capture(
     target_url,
-    user_agent="savepagenow (https://github.com/pastpages/savepagenow)",
+    user_agent="archiveis (https://github.com/pastpages/archiveis)",
 ):
     """
     Archives the provided URL using archive.is
