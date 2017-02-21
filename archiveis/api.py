@@ -39,7 +39,7 @@ def capture(
     html = str(response.content)
     try:
         unique_id = html.split('name="submitid', 1)[1].split('value="', 1)[1].split('"', 1)[0]
-        logger.debug("Unique ID: {}".format(unique_id))
+        logger.debug("Unique identifier: {}".format(unique_id))
     except IndexError:
         logger.warn("Unable to extract unique identifier from archive.is. Submitting without it.")
         unique_id = None
