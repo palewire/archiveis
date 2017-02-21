@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+import logging
 import unittest
 import archiveis
+logging.basicConfig(level=logging.DEBUG)
 
 
 class CaptureTest(unittest.TestCase):

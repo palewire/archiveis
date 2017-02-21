@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 import re
 import click
+import logging
 import requests
 from six.moves.urllib.parse import urljoin
+logger = logging.getLogger(__name__)
 
 
 def capture(
@@ -24,13 +26,37 @@ def capture(
         'User-Agent': user_agent,
     }
 
-    # Send the capture request to archive.is
+    # Request a unique identifier for our activity
+    logger.debug("Requesting {}".format(domain + "/"))
+    response = requests.get(
+        domain + "/",
+        timeout=120,
+        allow_redirects=True,
+        headers=headers
+    )
+
+    # It will need to be parsed from the homepage response headers
+    html = str(response.content)
+    try:
+        unique_id = html.split('name="submitid', 1)[1].split('value="', 1)[1].split('"', 1)[0]
+        logger.debug("Unique ID: {}".format(unique_id))
+    except IndexError:
+        raise Exception("Unable to extract unique identifier from archive.is. Please try again.")
+
+    # Send the capture request to archive.is with the unique id included
     data = {
-        "coo": '',
+        "submitid": unique_id,
         "url": target_url,
         "anyway": 1,
     }
-    response = requests.post(save_url, headers=headers, data=data)
+    logger.debug("Requesting {}".format(save_url))
+    response = requests.post(
+        save_url,
+        timeout=120,
+        allow_redirects=True,
+        headers=headers,
+        data=data
+    )
 
     # archive.is returns a link format timemap in the header field link
     # but if it was the first time archive.is has archived the uri-r
@@ -41,6 +67,7 @@ def capture(
                             '[-a-zA-Z0-9@:%_+.~#?&/=]+)"',
                             re.IGNORECASE | re.MULTILINE)
     mementos = memento_re.findall(response.text)
+    logger.debug("Memento: {}".format(mementos[0]))
 
     # the url to the memento is the first element in the list
     return mementos[0]
