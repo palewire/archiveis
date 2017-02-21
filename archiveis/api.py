@@ -41,14 +41,17 @@ def capture(
         unique_id = html.split('name="submitid', 1)[1].split('value="', 1)[1].split('"', 1)[0]
         logger.debug("Unique ID: {}".format(unique_id))
     except IndexError:
-        raise Exception("Unable to extract unique identifier from archive.is. Please try again.")
+        logger.warn("Unable to extract unique identifier from archive.is. Submitting without it.")
+        unique_id = None
 
     # Send the capture request to archive.is with the unique id included
     data = {
-        "submitid": unique_id,
         "url": target_url,
         "anyway": 1,
     }
+    if unique_id:
+        data.update({"submitid": unique_id})
+
     logger.debug("Requesting {}".format(save_url))
     response = requests.post(
         save_url,
