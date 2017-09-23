@@ -22,7 +22,7 @@ setup(
     ],
     install_requires=[
         'six',
-        'requests',
+        'cfscrape',
         'click',
     ],
 entry_points='''
