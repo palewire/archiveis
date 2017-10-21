@@ -3,9 +3,10 @@
 import re
 import click
 import logging
-import requests
+import cfscrape
 from six.moves.urllib.parse import urljoin
 logger = logging.getLogger(__name__)
+scraper = cfscrape.create_scraper()
 
 
 def capture(
@@ -28,7 +29,7 @@ def capture(
 
     # Request a unique identifier for our activity
     logger.debug("Requesting {}".format(domain + "/"))
-    response = requests.get(
+    response = scraper.get(
         domain + "/",
         timeout=120,
         allow_redirects=True,
@@ -53,7 +54,7 @@ def capture(
         data.update({"submitid": unique_id})
 
     logger.debug("Requesting {}".format(save_url))
-    response = requests.post(
+    response = scraper.post(
         save_url,
         timeout=120,
         allow_redirects=True,
