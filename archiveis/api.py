@@ -72,7 +72,10 @@ def capture(
         memento = response.headers['Location']
         logger.debug("Memento from Location header: {}".format(memento))
         return memento
+    logger.debug("Memento not found in response headers. Inspecting history.")
     for i, r in enumerate(response.history):
+        logger.debug("Inspecting history request #{}".format(i))
+        logger.debug(r.headers)
         if 'Location' in r.headers:
             memento = r.headers['Location']
             logger.debug("Memento from the Location header of {} history response: {}".format(i+1, memento))
