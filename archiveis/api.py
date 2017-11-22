@@ -3,10 +3,9 @@
 import re
 import click
 import logging
-import cfscrape
+import requests
 from six.moves.urllib.parse import urljoin
 logger = logging.getLogger(__name__)
-scraper = cfscrape.create_scraper()
 
 
 def capture(
@@ -19,17 +18,18 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
-    domain = "http://archive.is"
+    domain = "http://178.62.195.5"
     save_url = urljoin(domain, "/submit/")
 
     # Configure the request headers
     headers = {
         'User-Agent': user_agent,
+        "host": "archive.is",
     }
 
     # Request a unique identifier for our activity
     logger.debug("Requesting {}".format(domain + "/"))
-    response = scraper.get(
+    response = requests.get(
         domain + "/",
         timeout=120,
         allow_redirects=True,
@@ -54,7 +54,7 @@ def capture(
         data.update({"submitid": unique_id})
 
     logger.debug("Requesting {}".format(save_url))
-    response = scraper.post(
+    response = requests.post(
         save_url,
         timeout=120,
         allow_redirects=True,
@@ -71,6 +71,7 @@ def capture(
                             '[-a-zA-Z0-9@:%_+.~#?&/=]+)"',
                             re.IGNORECASE | re.MULTILINE)
     mementos = memento_re.findall(response.text)
+
     logger.debug("Memento: {}".format(mementos[0]))
 
     # the url to the memento is the first element in the list
