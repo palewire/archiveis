@@ -76,7 +76,10 @@ def capture(
             memento = r.headers['Location']
             logger.debug("Memento from the Location header of {} history response: {}".format(i+1, memento))
             return memento
-    # If there's nothing at this point, throw an erro
+    # If there's nothing at this point, throw an error
+    logger.error("No memento returned by archive.is")
+    logger.error(response.headers)
+    logger.error(response.text)
     raise Exception("No memento returned by archive.is")
 
 
