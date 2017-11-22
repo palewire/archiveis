@@ -34,6 +34,7 @@ def capture(
         allow_redirects=True,
         headers=headers
     )
+    response.raise_for_status()
 
     # It will need to be parsed from the homepage response headers
     html = str(response.content)
@@ -78,6 +79,7 @@ def capture(
             return memento
     # If there's nothing at this point, throw an error
     logger.error("No memento returned by archive.is")
+    logger.error("Status code: {}".format(response.status_code))
     logger.error(response.headers)
     logger.error(response.text)
     raise Exception("No memento returned by archive.is")
