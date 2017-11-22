@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import re
 import click
 import logging
 import requests
@@ -61,21 +60,24 @@ def capture(
         headers=headers,
         data=data
     )
+    response.raise_for_status()
 
-    # archive.is returns a link format timemap in the header field link
-    # but if it was the first time archive.is has archived the uri-r
-    # or for some other reason unknown at this time
-    # this information will not be present so resort to searching the
-    # returned html page
-    memento_re = re.compile('"(http(?:s)?://archive\.is/(?:[0-9]{14}/(?:\b)?)?'
-                            '[-a-zA-Z0-9@:%_+.~#?&/=]+)"',
-                            re.IGNORECASE | re.MULTILINE)
-    mementos = memento_re.findall(response.text)
-
-    logger.debug("Memento: {}".format(mementos[0]))
-
-    # the url to the memento is the first element in the list
-    return mementos[0]
+    # There are a couple ways the header can come back
+    if 'Refresh' in response.headers:
+        memento = str(response.headers['Refresh']).split(';url=')[1]
+        logger.debug("Memento from Refresh header: {}".format(memento))
+        return memento
+    if 'Location' in response.headers:
+        memento = response.headers['Location']
+        logger.debug("Memento from Location header: {}".format(memento))
+        return memento
+    for i, r in enumerate(response.history):
+        if 'Location' in r.headers:
+            memento = r.headers['Location']
+            logger.debug("Memento from the Location header of {} history response: {}".format(i+1, memento))
+            return memento
+    # If there's nothing at this point, throw an erro
+    raise Exception("No memento returned by archive.is")
 
 
 @click.command()
