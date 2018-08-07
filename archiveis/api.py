@@ -51,7 +51,7 @@ def capture(
 
     # It will need to be parsed from the homepage response headers
     html = str(response.content)
-    try
+    try:
         unique_id = html.split('name="submitid', 1)[1].split('value="', 1)[1].split('"', 1)[0]
         logger.debug("Unique identifier: {}".format(unique_id))
     except IndexError:
