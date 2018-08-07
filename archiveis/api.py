@@ -28,12 +28,12 @@ def capture(
 
     # Use Proxy
     if proxy:
-        http_proxy  = "http://%s" % proxy
-        https_proxy  = "https://%s" % proxy 
+        http_proxy = "http://%s" % proxy
+        https_proxy = "https://%s" % proxy 
         proxyDict = {"http": http_proxy, "https": https_proxy}
     else:
         proxyDict = {}
-        
+
     # Request a unique identifier for our activity
     logger.debug("Requesting {}".format(domain + "/"))
     response = requests.get(
