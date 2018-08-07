@@ -9,6 +9,7 @@ logger = logging.getLogger(__name__)
 
 def capture(
     target_url,
+    proxy=None,
     user_agent="archiveis (https://github.com/pastpages/archiveis)",
 ):
     """
@@ -17,14 +18,21 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
-    domain = "http://178.62.195.5"
+    domain = "http://archive.is"
     save_url = urljoin(domain, "/submit/")
 
     # Configure the request headers
     headers = {
         'User-Agent': user_agent,
-        "host": "archive.is",
     }
+
+    # Use Proxy
+    if proxy:
+        http_proxy = "http://%s" % proxy
+        https_proxy = "https://%s" % proxy
+        proxyDict = {"http": http_proxy, "https": https_proxy}
+    else:
+        proxyDict = {}
 
     # Request a unique identifier for our activity
     logger.debug("Requesting {}".format(domain + "/"))
@@ -32,7 +40,8 @@ def capture(
         domain + "/",
         timeout=120,
         allow_redirects=True,
-        headers=headers
+        headers=headers,
+        proxies=proxyDict
     )
     response.raise_for_status()
 
@@ -59,7 +68,8 @@ def capture(
         timeout=120,
         allow_redirects=True,
         headers=headers,
-        data=data
+        data=data,
+        proxies=proxyDict
     )
     response.raise_for_status()
 
