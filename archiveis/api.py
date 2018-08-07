@@ -35,7 +35,6 @@ def capture(
                 "http"  : http_proxy,
                 "https" : https_proxy,
                 }
-                # Request a unique identifier for our activity
     else:
         proxyDict = {}
         
