@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name='archiveis',
-    version='0.0.5',
+    version='0.0.6',
     description='A simple Python wrapper for the archive.is capturing service.',
     author='Ben Welsh',
     author_email='ben.welsh@gmail.com',
