@@ -30,11 +30,7 @@ def capture(
     if proxy:
         http_proxy  = "http://%s" % proxy
         https_proxy  = "https://%s" % proxy 
-
-        proxyDict = {
-                "http"  : http_proxy,
-                "https" : https_proxy,
-                }
+        proxyDict = {"http":http_proxy, "https":https_proxy,}
     else:
         proxyDict = {}
         
