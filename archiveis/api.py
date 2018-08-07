@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 def capture(
     target_url,
     user_agent="archiveis (https://github.com/pastpages/archiveis)",
+    proxies={}
 ):
     """
     Archives the provided URL using archive.is
@@ -17,7 +18,7 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
-    domain = "http://178.62.195.5"
+    domain = "http://archive.is"
     save_url = urljoin(domain, "/submit/")
 
     # Configure the request headers
@@ -28,12 +29,14 @@ def capture(
 
     # Request a unique identifier for our activity
     logger.debug("Requesting {}".format(domain + "/"))
-    response = requests.get(
-        domain + "/",
+    get_kwargs = dict(
         timeout=120,
         allow_redirects=True,
-        headers=headers
+        headers=headers,
     )
+    if proxies:
+        get_kwargs['proxies'] = proxies
+    response = requests.get(domain + "/", **get_kwargs)
     response.raise_for_status()
 
     # It will need to be parsed from the homepage response headers
@@ -53,14 +56,17 @@ def capture(
     if unique_id:
         data.update({"submitid": unique_id})
 
-    logger.debug("Requesting {}".format(save_url))
-    response = requests.post(
-        save_url,
+    post_kwargs = dict(
         timeout=120,
         allow_redirects=True,
         headers=headers,
         data=data
     )
+    if proxies:
+        post_kwargs['proxies'] = proxies
+
+    logger.debug("Requesting {}".format(save_url))
+    response = requests.post(save_url, **post_kwargs)
     response.raise_for_status()
 
     # There are a couple ways the header can come back
