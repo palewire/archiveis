@@ -23,7 +23,7 @@ setup(
     ],
     install_requires=[
         'six',
-        'requests',
+        'requests = ">=2.20.0"',
         'click',
     ],
 entry_points='''

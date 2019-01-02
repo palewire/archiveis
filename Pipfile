@@ -5,14 +5,14 @@ name = "pypi"
 
 [packages]
 six = "*"
-requests = "*"
+requests = ">=2.20.0"
 click = "*"
+
+[dev-packages]
 "flake8" = "*"
 coverage = "*"
 coveralls = "*"
 twine = "*"
-
-[dev-packages]
 
 [requires]
 python_version = "3.6"
