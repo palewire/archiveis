@@ -18,13 +18,13 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
-    domain = "http://archive.is"
+    domain = "http://archive.vn"
     save_url = urljoin(domain, "/submit/")
 
     # Configure the request headers
     headers = {
         'User-Agent': user_agent,
-        "host": "archive.is",
+        "host": "archive.vn",
     }
 
     # Request a unique identifier for our activity
