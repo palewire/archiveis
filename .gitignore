@@ -1,5 +1,11 @@
-*egg-info/
+# Compiled python
 *.pyc
+
+# Packaging
 dist/
 build/
+*.egg-info/
+
+# Tests
+.tox/
 .coverage
