@@ -3,8 +3,8 @@ from setuptools import setup
 
 setup(
     name='archiveis',
-    version='0.0.7',
-    description='A simple Python wrapper for the archive.is capturing service.',
+    version='0.0.8',
+    description='A simple Python wrapper for the archive.is capturing service',
     author='Ben Welsh',
     author_email='ben.welsh@gmail.com',
     url='http://www.github.com/pastpages/archiveis/',
@@ -17,7 +17,6 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'License :: OSI Approved :: MIT License',
@@ -25,7 +24,7 @@ setup(
     install_requires=[
         'six',
         'requests>=2.20.0',
-        'click',
+        'click'
     ],
 entry_points='''
         [console_scripts]
