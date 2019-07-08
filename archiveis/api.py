@@ -7,6 +7,36 @@ from six.moves.urllib.parse import urljoin
 logger = logging.getLogger(__name__)
 
 
+def send_request(target, user_agent, proxies, data=None):
+    """Send HTTP requests and handle the response"""
+    # Configure the request headers
+    headers = {
+        'User-Agent': user_agent,
+        "host": "archive.fo",
+    }
+    # Configure request arguments
+    request_kwargs = dict(
+        timeout=120,
+        allow_redirects=True,
+        headers=headers,
+    )
+    if proxies:
+        request_kwargs['proxies'] = proxies
+    # Send request
+    if data is None:
+        # this is a GET request
+        logger.debug("Requesting (GET) {}".format(target))
+        response = requests.get(target, **request_kwargs)
+        response.raise_for_status()
+    else:
+        # this is a POST request
+        request_kwargs["data"] = data
+        logger.debug("Requesting (POST) {}".format(target))
+        response = requests.post(target, **request_kwargs)
+        response.raise_for_status()
+    return response
+
+
 def capture(
     target_url,
     user_agent="archiveis (https://github.com/pastpages/archiveis)",
@@ -23,28 +53,14 @@ def capture(
     domain = "http://archive.fo"
     save_url = urljoin(domain, "/submit/")
 
-    # Configure the request headers
-    headers = {
-        'User-Agent': user_agent,
-        "host": "archive.fo",
-    }
-
     # Request a unique identifier for our activity
-    logger.debug("Requesting {}".format(domain + "/"))
-    get_kwargs = dict(
-        timeout=120,
-        allow_redirects=True,
-        headers=headers,
-    )
-    if proxies:
-        get_kwargs['proxies'] = proxies
-    response = requests.get(domain + "/", **get_kwargs)
-    response.raise_for_status()
+    id_request = domain + "/"
+    # Send request
+    response = send_request(id_request, user_agent, proxies)
 
     # It will need to be parsed from the homepage response headers
-    html = str(response.content)
     try:
-        unique_id = html.split('name="submitid', 1)[1].split('value="', 1)[1].split('"', 1)[0]
+        unique_id = response.text.split('name="submitid', 1)[1].split('value="', 1)[1].split('"', 1)[0]
         logger.debug("Unique identifier: {}".format(unique_id))
     except IndexError:
         logger.warn("Unable to extract unique identifier from archive.is. Submitting without it.")
@@ -58,18 +74,8 @@ def capture(
     if unique_id:
         data.update({"submitid": unique_id})
 
-    post_kwargs = dict(
-        timeout=120,
-        allow_redirects=True,
-        headers=headers,
-        data=data
-    )
-    if proxies:
-        post_kwargs['proxies'] = proxies
-
-    logger.debug("Requesting {}".format(save_url))
-    response = requests.post(save_url, **post_kwargs)
-    response.raise_for_status()
+    # Send request
+    response = send_request(save_url, user_agent, proxies, data)
 
     # There are a couple ways the header can come back
     if 'Refresh' in response.headers:
