@@ -10,7 +10,9 @@ logger = logging.getLogger(__name__)
 def capture(
     target_url,
     user_agent="archiveis (https://github.com/pastpages/archiveis)",
-    proxies={}
+    proxies={},
+    screenshot=False,
+    zip_file=False,
 ):
     """
     Archives the provided URL using archive.is
@@ -97,13 +99,19 @@ def capture(
 @click.command()
 @click.argument("url")
 @click.option("-ua", "--user-agent", help="User-Agent header for the web request")
-def cli(url, user_agent):
+@click.option("-s", "--screenshot", help="Download a rendered screenshot", default=False)
+@click.option("-z", "--zip-file", help="Download a ZIP-file containing the webpage", default=False)
+def cli(url, user_agent, screenshot, zip_file):
     """
     Archives the provided URL using archive.is.
     """
     kwargs = {}
     if user_agent:
         kwargs['user_agent'] = user_agent
+    if screenshot:
+        kwargs['screenshot'] = screenshot
+    if zip_file:
+        kwargs['zip_file'] = zip_file
     archive_url = capture(url, **kwargs)
     click.echo(archive_url)
 
