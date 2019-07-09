@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 import click
 import logging
+import re
 import requests
 from six.moves.urllib.parse import urljoin
+import time
+
 logger = logging.getLogger(__name__)
 
 
@@ -50,6 +53,7 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
+    memento = None
     domain = "http://archive.fo"
     save_url = urljoin(domain, "/submit/")
 
@@ -81,32 +85,58 @@ def capture(
     if 'Refresh' in response.headers:
         memento = str(response.headers['Refresh']).split(';url=')[1]
         logger.debug("Memento from Refresh header: {}".format(memento))
-        return memento
-    if 'Location' in response.headers:
+    elif 'Location' in response.headers:
         memento = response.headers['Location']
         logger.debug("Memento from Location header: {}".format(memento))
-        return memento
-    logger.debug("Memento not found in response headers. Inspecting history.")
-    for i, r in enumerate(response.history):
-        logger.debug("Inspecting history request #{}".format(i))
-        logger.debug(r.headers)
-        if 'Location' in r.headers:
-            memento = r.headers['Location']
-            logger.debug("Memento from the Location header of {} history response: {}".format(i+1, memento))
-            return memento
+    else:
+        logger.debug("Memento not found in response headers. Inspecting history.")
+        for i, r in enumerate(response.history):
+            logger.debug("Inspecting history request #{}".format(i))
+            logger.debug(r.headers)
+            if 'Location' in r.headers:
+                memento = r.headers['Location']
+                logger.debug("Memento from the Location header of {} history response: {}".format(i+1, memento))
     # If there's nothing at this point, throw an error
-    logger.error("No memento returned by archive.is")
-    logger.error("Status code: {}".format(response.status_code))
-    logger.error(response.headers)
-    logger.error(response.text)
-    raise Exception("No memento returned by archive.is")
+    if memento is None:
+        logger.error("No memento returned by archive.is")
+        logger.error("Status code: {}".format(response.status_code))
+        logger.error(response.headers)
+        logger.error(response.text)
+        raise Exception("No memento returned by archive.is")
+    # else
+    screenshot_response = None
+    zip_response = None
+    memento_id = re.sub("^https?://archive.fo/", "", memento)
+    # sleep to let the page load
+    if screenshot is True or zip_file is True:
+        time.sleep(60)
+    if screenshot is True:
+        # first request
+        screenshot_url = memento + '/image'
+        logger.debug(screenshot_url)
+        response = send_request(screenshot_url, user_agent, proxies)
+        pattern = 'https?://archive.fo/'  + memento_id + '/[a-f0-9]+?/scr.png'
+        print(pattern)
+        match = re.search(pattern, response.text)
+        if match:
+            # second request
+            screenshot_url = match.group(0)
+            logger.debug(screenshot_url)
+            response = send_request(screenshot_url, user_agent, proxies)
+            screenshot_response = response.content
+    if zip_file is True:
+        zip_url = 'http://archive.fo/download/' + memento_id + '.zip'
+        logger.debug(zip_url)
+        response = send_request(zip_url, user_agent, proxies)
+        zip_response = response.content
+    return memento, screenshot_response, zip_response
 
 
 @click.command()
 @click.argument("url")
 @click.option("-ua", "--user-agent", help="User-Agent header for the web request")
-@click.option("-s", "--screenshot", help="Download a rendered screenshot", default=False)
-@click.option("-z", "--zip-file", help="Download a ZIP-file containing the webpage", default=False)
+@click.option("-s", "--screenshot", help="Download a rendered screenshot (defaults to 'snapshot name'.png)", is_flag=True)
+@click.option("-z", "--zip-file", help="Download a ZIP-file containing the webpage (defaults to 'snapshot name'.zip)", is_flag=True)
 def cli(url, user_agent, screenshot, zip_file):
     """
     Archives the provided URL using archive.is.
@@ -118,8 +148,26 @@ def cli(url, user_agent, screenshot, zip_file):
         kwargs['screenshot'] = screenshot
     if zip_file:
         kwargs['zip_file'] = zip_file
-    archive_url = capture(url, **kwargs)
+    archive_url, screenshot_response, zip_response = capture(url, **kwargs)
     click.echo(archive_url)
+    if screenshot or zip_file:
+        snapshot_name = re.sub("^https?://archive.fo/", "", archive_url)
+        if screenshot:
+            if screenshot_response is not None:
+                filename = snapshot_name + '.png'
+                with open(filename, 'wb') as outfile:
+                    outfile.write(screenshot_response)
+                click.echo('Screenshot saved')
+            else:
+                logger.error("No screenshot returned by archive.is")
+        if zip_file:
+            if zip_response is not None:
+                filename = snapshot_name + '.zip'
+                with open(filename, 'wb') as outfile:
+                    outfile.write(zip_response)
+                click.echo('ZIP-file saved')
+            else:
+                logger.error("No ZIP file returned by archive.is")
 
 
 if __name__ == "__main__":
