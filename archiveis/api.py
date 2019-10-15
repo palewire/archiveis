@@ -7,15 +7,16 @@ from six.moves.urllib.parse import urljoin
 logger = logging.getLogger(__name__)
 
 
-def capture(
+def do_post(
     target_url,
     user_agent="archiveis (https://github.com/pastpages/archiveis)",
-    proxies={}
+    proxies={},
+    anyway=1
 ):
     """
     Archives the provided URL using archive.is
 
-    Returns the URL where the capture is stored.
+    Returns the POST response object
     """
     # Put together the URL that will save our request
     domain = "http://archive.fo"
@@ -51,7 +52,7 @@ def capture(
     # Send the capture request to archive.is with the unique id included
     data = {
         "url": target_url,
-        "anyway": 1,
+        "anyway": anyway,
     }
     if unique_id:
         data.update({"submitid": unique_id})
@@ -66,7 +67,20 @@ def capture(
         post_kwargs['proxies'] = proxies
 
     logger.debug("Requesting {}".format(save_url))
-    response = requests.post(save_url, **post_kwargs)
+    return requests.post(save_url, **post_kwargs)
+
+
+def capture(
+    target_url,
+    user_agent="archiveis (https://github.com/pastpages/archiveis)",
+    proxies={},
+):
+    """
+    Archives the provided URL using archive.is
+
+    Returns the URL where the capture is stored.
+    """
+    response = do_post(target_url, user_agent, proxies)
     response.raise_for_status()
 
     # There are a couple ways the header can come back
