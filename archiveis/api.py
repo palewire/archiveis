@@ -70,19 +70,7 @@ def do_post(
     return requests.post(save_url, **post_kwargs)
 
 
-def capture(
-    target_url,
-    user_agent="archiveis (https://github.com/pastpages/archiveis)",
-    proxies={},
-):
-    """
-    Archives the provided URL using archive.is
-
-    Returns the URL where the capture is stored.
-    """
-    response = do_post(target_url, user_agent, proxies)
-    response.raise_for_status()
-
+def parse_memento(response):
     # There are a couple ways the header can come back
     if 'Refresh' in response.headers:
         memento = str(response.headers['Refresh']).split(';url=')[1]
@@ -106,6 +94,21 @@ def capture(
     logger.error(response.headers)
     logger.error(response.text)
     raise Exception("No memento returned by archive.is")
+
+
+def capture(
+    target_url,
+    user_agent="archiveis (https://github.com/pastpages/archiveis)",
+    proxies={},
+):
+    """
+    Archives the provided URL using archive.is
+
+    Returns the URL where the capture is stored.
+    """
+    response = do_post(target_url, user_agent, proxies)
+    response.raise_for_status()
+    return parse_memento(response)
 
 
 @click.command()
