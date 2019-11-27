@@ -10,7 +10,7 @@ class CaptureTest(unittest.TestCase):
 
     def test_capture(self):
         archive_url_1 = archiveis.capture("http://www.example.com/")
-        self.assertTrue(archive_url_1.startswith("http://archive.fo/"))
+        self.assertTrue(archive_url_1.startswith("http://archive.md/"))
 
 
 if __name__ == '__main__':
