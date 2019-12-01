@@ -8,7 +8,7 @@ def read(fname):
 
 setup(
     name='archiveis',
-    version='0.0.8',
+    version='0.0.9',
     description='A simple Python wrapper for the archive.is capturing service',
     long_description=read('README.md'),
     long_description_content_type="text/markdown",
