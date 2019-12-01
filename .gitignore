@@ -9,3 +9,6 @@ build/
 # Tests
 .tox/
 .coverage
+
+# vscode
+settings.json
