@@ -9,7 +9,7 @@ A simple Python wrapper for the [archive.is](http://archive.is/) capturing servi
 ### Installation
 
 ```bash
-$ pip install archiveis
+$ pipenv install archiveis
 ```
 
 ### Python Usage
@@ -55,4 +55,12 @@ Usage: archiveis [OPTIONS] URL
 Options:
   -ua, --user-agent TEXT  User-Agent header for the web request
   --help                  Show this message and exit.
+```
+
+### Developing the CLI
+
+The command-line interface is implemented using Click and setuptools. To install it locally for development inside your virtual environment, run the following installation command, as [prescribed by the Click documentation](https://click.palletsprojects.com/en/7.x/setuptools/#setuptools-integration).
+
+```bash
+$ pip install --editable .
 ```
