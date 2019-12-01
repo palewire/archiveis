@@ -30,7 +30,7 @@ See where it's stored.
 
 ```python
 >>> print archive_url
-http://archive.fo/WxlRK
+http://archive.md/WxlRK
 ```
 
 If a URL has been recently cached, archive.is may return the URL to that page rather
