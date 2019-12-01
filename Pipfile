@@ -4,8 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-six = "*"
-requests = ">=2.20.0"
+requests = ">=2.22.0"
 click = "*"
 
 [dev-packages]
@@ -13,6 +12,7 @@ click = "*"
 coverage = "*"
 coveralls = "*"
 twine = "*"
+pylint = "*"
 
 [requires]
 python_version = "3.6"

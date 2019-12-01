@@ -9,7 +9,7 @@ A simple Python wrapper for the [archive.is](http://archive.is/) capturing servi
 ### Installation
 
 ```bash
-$ pipenv install archiveis
+pipenv install archiveis
 ```
 
 ### Python Usage
@@ -30,7 +30,7 @@ See where it's stored.
 
 ```python
 >>> print archive_url
-http://archive.fo/WxlRK
+http://archive.md/WxlRK
 ```
 
 If a URL has been recently cached, archive.is may return the URL to that page rather
@@ -41,7 +41,7 @@ than conduct a new capture.
 The Python library is also installed as a command-line interface. You can run it from your terminal like so:
 
 ```bash
-$ archiveis http://www.example.com/
+archiveis http://www.example.com/
 ```
 
 The command has the same options as the Python API, which you can learn about from its help output.
@@ -57,10 +57,30 @@ Options:
   --help                  Show this message and exit.
 ```
 
+### Contributing
+
+Install dependencies for development.
+
+```bash
+pipenv install --dev
+```
+
+Run tests.
+
+```bash
+make test
+```
+
+Ship new version to PyPI
+
+```bash
+make ship
+```
+
 ### Developing the CLI
 
 The command-line interface is implemented using Click and setuptools. To install it locally for development inside your virtual environment, run the following installation command, as [prescribed by the Click documentation](https://click.palletsprojects.com/en/7.x/setuptools/#setuptools-integration).
 
 ```bash
-$ pip install --editable .
+pip install --editable .
 ```

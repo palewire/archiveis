@@ -3,7 +3,6 @@
 import click
 import logging
 import requests
-from six.moves.urllib.parse import urljoin
 logger = logging.getLogger(__name__)
 
 
@@ -18,13 +17,13 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
-    domain = "http://archive.fo"
-    save_url = urljoin(domain, "/submit/")
+    domain = "https://archive.md"
+    save_url = domain + "/submit/"
 
     # Configure the request headers
     headers = {
         'User-Agent': user_agent,
-        "host": "archive.fo",
+        "host": "archive.md",
     }
 
     # Request a unique identifier for our activity

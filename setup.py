@@ -1,13 +1,20 @@
+import os
 from setuptools import setup
 
+
+def read(fname):
+    with open(os.path.join(os.path.dirname(__file__), fname)) as f:
+        return f.read()
 
 setup(
     name='archiveis',
     version='0.0.8',
     description='A simple Python wrapper for the archive.is capturing service',
+    long_description=read('README.md'),
+    long_description_content_type="text/markdown",
     author='Ben Welsh',
     author_email='ben.welsh@gmail.com',
-    url='http://www.github.com/pastpages/archiveis/',
+    url='https://www.github.com/pastpages/archiveis/',
     packages=('archiveis',),
     include_package_data=True,
     license="MIT",
@@ -22,8 +29,7 @@ setup(
         'License :: OSI Approved :: MIT License',
     ],
     install_requires=[
-        'six',
-        'requests>=2.20.0',
+        'requests>=2.22.0',
         'click'
     ],
 entry_points='''
