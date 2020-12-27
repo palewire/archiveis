@@ -3,9 +3,6 @@
 A simple Python wrapper for the [archive.is](http://archive.is/) capturing service.
 
 [![PyPI version](https://badge.fury.io/py/archiveis.png)](http://badge.fury.io/py/archiveis)
-[![Build Status](https://travis-ci.org/pastpages/archiveis.svg?branch=master)](https://travis-ci.org/pastpages/archiveis)
-[![Versions supported](https://img.shields.io/pypi/pyversions/archiveis.svg)](https://pypi.org/project/archiveis)
-[![Coverage Status](https://coveralls.io/repos/github/pastpages/archiveis/badge.svg?branch=master)](https://coveralls.io/github/pastpages/archiveis?branch=master)
 
 ### Installation
 
