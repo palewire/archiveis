@@ -2,7 +2,7 @@
 
 A simple Python wrapper for the [archive.is](http://archive.is/) capturing service.
 
-[![PyPI version](https://badge.fury.io/py/archiveis.png)](http://badge.fury.io/py/archiveis)
+![Tests](https://github.com/pastpages/archiveis/workflows/Tests/badge.svg)
 
 ### Installation
 
