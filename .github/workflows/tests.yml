@@ -1,0 +1,22 @@
+name: Tests
+on: push
+
+jobs:
+  test:
+    name: Test 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install dependencies
+        uses: ./.github/actions/install-pipenv 
+      
+      - name: Run
+        run: |
+            make test

@@ -17,13 +17,13 @@ def capture(
     Returns the URL where the capture is stored.
     """
     # Put together the URL that will save our request
-    domain = "https://archive.md"
+    domain = "https://archive.is"
     save_url = domain + "/submit/"
 
     # Configure the request headers
     headers = {
         'User-Agent': user_agent,
-        "host": "archive.md",
+        "host": "archive.is",
     }
 
     # Request a unique identifier for our activity

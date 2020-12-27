@@ -1,0 +1,21 @@
+name: 'Commit'
+description: 'Commit changes in the local repository to the current branch'
+inputs:
+  message: 
+    description: 'The commit message'
+    required: true
+runs:
+  using: "composite"
+  steps: 
+    - id: commit 
+      name: Commit
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "actions@github.com"
+        git config pull.rebase false
+        git status
+        git pull origin $GITHUB_REF
+        git add ./_data/
+        git add ./_notebooks/data/
+        git commit -m "${{ inputs.message }}" && git push || true
+      shell: bash

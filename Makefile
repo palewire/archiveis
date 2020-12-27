@@ -7,6 +7,6 @@ ship:
 
 
 test:
-	flake8 archiveis
-	coverage run test.py
-	coverage report -m
+	pipenv run flake8 archiveis
+	pipenv run coverage run test.py
+	pipenv run coverage report -m

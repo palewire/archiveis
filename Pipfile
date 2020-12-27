@@ -6,8 +6,6 @@ name = "pypi"
 [packages]
 requests = ">=2.22.0"
 click = "*"
-
-[dev-packages]
 "flake8" = "*"
 coverage = "*"
 coveralls = "*"
@@ -15,4 +13,4 @@ twine = "*"
 pylint = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"
