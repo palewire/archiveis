@@ -4,13 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = ">=2.22.0"
+requests = "*"
 click = "*"
 "flake8" = "*"
-coverage = "*"
-coveralls = "*"
 twine = "*"
 pylint = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"
