@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+import urllib.parse
 
 import click
 import requests
@@ -17,18 +18,20 @@ def capture(
 
     Returns the URL where the capture is stored.
     """
+    # The site changes its TLD all the time. Cache what we get currently.
+    domain = requests.get("https://archive.is").url
+
     # Put together the URL that will save our request
-    domain = "https://archive.is"
-    save_url = domain + "/submit/"
+    save_url = domain + "submit/"
 
     # Configure the request headers
     headers = {
         "User-Agent": user_agent,
-        "host": "archive.is",
+        "host": urllib.parse.urlparse(domain).netloc,
     }
 
     # Request a unique identifier for our activity
-    logger.debug("Requesting {}".format(domain + "/"))
+    logger.debug(f"Requesting {domain}")
     get_kwargs = dict(
         timeout=120,
         allow_redirects=True,
@@ -36,7 +39,7 @@ def capture(
     )
     if proxies:
         get_kwargs["proxies"] = proxies
-    response = requests.get(domain + "/", **get_kwargs)
+    response = requests.get(domain, **get_kwargs)
     response.raise_for_status()
 
     # It will need to be parsed from the homepage response headers
@@ -47,7 +50,7 @@ def capture(
         )
         logger.debug(f"Unique identifier: {unique_id}")
     except IndexError:
-        logger.warn(
+        logger.warning(
             "Unable to extract unique identifier from archive.is. Submitting without it."
         )
         unique_id = None

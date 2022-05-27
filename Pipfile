@@ -9,6 +9,8 @@ click = "*"
 "flake8" = "*"
 twine = "*"
 pylint = "*"
+bs4 = "*"
+html5lib = "*"
 
 [requires]
 python_version = "3.9"

@@ -29,7 +29,10 @@ setup(
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
     ],
-    install_requires=["requests>=2.22.0", "click"],
+    install_requires=[
+        "requests",
+        "click",
+    ],
     entry_points="""
         [console_scripts]
         archiveis=archiveis.api:cli
