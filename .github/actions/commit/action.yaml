@@ -1,13 +1,13 @@
 name: 'Commit'
 description: 'Commit changes in the local repository to the current branch'
 inputs:
-  message: 
+  message:
     description: 'The commit message'
     required: true
 runs:
   using: "composite"
-  steps: 
-    - id: commit 
+  steps:
+    - id: commit
       name: Commit
       run: |
         git config --global user.name "github-actions[bot]"

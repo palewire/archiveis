@@ -15,20 +15,13 @@ pipenv install archiveis
 Import it.
 
 ```python
->>> import archiveis
+import archiveis
 ```
 
 Capture a URL.
 
 ```python
->>> archive_url = archiveis.capture("http://www.example.com/")
-```
-
-See where it's stored.
-
-```python
->>> print archive_url
-https://archive.md/WxlRK
+archive_url = archiveis.capture("http://www.example.com/")
 ```
 
 If a URL has been recently cached, archive.is may return the URL to that page rather

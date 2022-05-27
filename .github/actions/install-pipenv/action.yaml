@@ -2,7 +2,7 @@ name: 'Install pipenv'
 description: 'Install the Python package manager pipenv'
 runs:
   using: "composite"
-  steps: 
+  steps:
     - id: install-pipenv
       name: Install pipenv
       run: |
